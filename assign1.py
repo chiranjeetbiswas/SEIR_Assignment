@@ -61,5 +61,28 @@ def compute_simhash(word_frequency):
             simhash_Code+=0*(2**i)
     return simhash_Code
 
+def compair_Two_page(url_1,url_2):
+    url_1,url_2=sys.argv[1],sys.argv[2]
+
+    response1,response2=requests.get(url_1),requests.get(url_2)
+
+    body1,title1,links1=get_body_title_link(response1)
+    body2,title2,links2=get_body_title_link(response2)
+
+    word_freq1,word_freq2=word_count(body1),word_count(body2)
+
+    simhash_code1,simhash_code2=compute_simhash(word_freq1),compute_simhash(word_freq2)
+    similler_word=0
+    for i in range(64):
+        value1=(simhash_code1>>i)&1
+        value2=(simhash_code2>>i)&1
+        if value1==value2:
+            similler_word+=1
+    
+    return similler_word 
+
+compair=compair_Two_page(sys.argv[1],sys.argv[2])
+print("Total common bits are: ",compair)
+
 
 
