@@ -35,5 +35,31 @@ def word_count(str):
             word_frequency[word]=1
     return word_frequency
 
+def Hash(word,p=53,m=2**64):
+    hash=0
+    for i in range(len(word)):
+        hash+=ord(word[i])*(p**i)
+    hash=hash%m
+    return hash
+
+def compute_simhash(word_frequency):
+    vector=[0 for k in range(64)]
+    for key in word_frequency:
+        hashValue=Hash(key)
+        for i in range(64):
+            bit=(hashValue>>i)&1
+            if bit==1:
+                vector[i]+=word_frequency[key]
+            else:
+                vector[i]-=word_frequency[key]
+        
+    simhash_Code=0
+    for i in range(len(vector)):
+        if vector[i] > 0:
+            simhash_Code+=1*(2**i)
+        else:
+            simhash_Code+=0*(2**i)
+    return simhash_Code
+
 
 
